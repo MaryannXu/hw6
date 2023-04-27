@@ -95,5 +95,42 @@ bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
 //add your solution here!
+	//check if the row and column indexes are inside the bounds of the board size
+	//if they are not inside, then check if the current word is inside the dictionary (if yes, add to the results, if no then return false)
+	if( r > (board.size() - 1) || c > (board.size() - 1)){
+		if (dict.find(word) != dict.end()){
+			result.insert(word);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
+	//if r and c are inside
+	bool continued = false;
+	//check if the current word is not a prefix and is in the dict
+	if (prefix.find(word) == prefix.end() && dict.find(word) != dict.end() && word.length() > 0){
+		//if it is, then insert the word into results
+		result.insert(word);
+		return true;
+	}
+	//else create recurse bool with new word and incrementing r+dr and c+dc
+	else {
+		continued = boggleHelper(dict, prefix, board, word+board[r][c], result, r+dr, c+dc, dr, dc);
+	}
+
+	//check if recusion is false,
+	if (continued == false){
+		//then insert if word is in dict
+		if (dict.find(word) != dict.end()){
+			result.insert(word);
+			return true;
+		}
+	}
+	else {
+		return true;
+	}
+
+	return false;
 }
